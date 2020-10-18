@@ -1,7 +1,7 @@
 const http = require("http");
 const products = require('./data/products.json');
 const regexs  = require('./regexs')
-const { getProduct } = require('./controllers/productsController');
+const { getProducts, getProducts, createProduct } = require('./controllers/productsController');
 
 const server = http.createServer((req,res) => {
     //return basic html
@@ -10,10 +10,12 @@ const server = http.createServer((req,res) => {
     // res.write("<h1>Hello World!<h1>")
     // res.end()
     if(req.url === '/api/products' && req.method === 'GET'){
-        getProduct(req,res)
+        getProducts(req,res)
     } else if(req.url.match(regexs.BY_ID_ROUTE) && req.method === 'GET'){
         const id = req.url.split('/api/products/')[1]
         getProduct(req,res,id)
+    }else if (req.url === '/api/product' && req.method === 'POST'){
+        createProduct(req,res);
     }else{
         res.writeHead(404 , {'Content-Type': 'application/json'})
         res.end(JSON.stringify({
